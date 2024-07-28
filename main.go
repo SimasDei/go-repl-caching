@@ -6,6 +6,8 @@ import (
 	"os"
 	"strings"
 	"time"
+
+	"github.com/SimasDei/go-repl-caching/example"
 )
 
 // Simple in-memory cache
@@ -56,4 +58,6 @@ func main() {
 			fmt.Println("Stored:", input)
 		}
 	}
+
+	example.AlternativeMain()
 }
