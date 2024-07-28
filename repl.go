@@ -16,6 +16,11 @@ func startRepl(cfg *config) {
 		scanner.Scan()
 		text := scanner.Text()
 		cleaned := cleanInput(text)
+		args := []string{}
+
+		if len(cleaned) > 1 {
+			args = cleaned[1:]
+		}
 
 		if len(cleaned) == 0 {
 			continue
@@ -31,7 +36,7 @@ func startRepl(cfg *config) {
 			continue
 		}
 
-		err := command.callback(cfg)
+		err := command.callback(cfg, args...)
 
 		if err != nil {
 			fmt.Println("An error occurred: ", err.Error())
@@ -43,7 +48,7 @@ func startRepl(cfg *config) {
 type CliCommand struct {
 	Name        string
 	Description string
-	callback    func(*config) error
+	callback    func(*config, ...string) error
 }
 
 func getCommands() map[string]CliCommand {
@@ -67,6 +72,11 @@ func getCommands() map[string]CliCommand {
 			Name:        "map-back",
 			Description: "Lists the previous locations",
 			callback:    callbackMapBack,
+		},
+		"explore": {
+			Name:        "explore {location area name}",
+			Description: "Explores a location",
+			callback:    callbackExplore,
 		},
 	}
 }

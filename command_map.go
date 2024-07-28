@@ -4,7 +4,7 @@ import (
 	"errors"
 )
 
-func callbackMap(cfg *config) error {
+func callbackMap(cfg *config, args ...string) error {
 
 	resp, err := cfg.pokeapiClient.ListLocationAreas(cfg.nextLocationAreaUrl)
 
@@ -24,7 +24,7 @@ func callbackMap(cfg *config) error {
 	return nil
 }
 
-func callbackMapBack(cfg *config) error {
+func callbackMapBack(cfg *config, args ...string) error {
 	if cfg.prevLocationAreaUrl == nil {
 		return errors.New("No previous location area URL")
 	}
