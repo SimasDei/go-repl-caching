@@ -23,3 +23,6 @@ go.work.sum
 
 # Package Binary
 go-repl-caching
+
+# Debug files
+__debug_*

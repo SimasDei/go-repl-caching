@@ -8,7 +8,8 @@
       "mode": "auto",
       "program": "${workspaceFolder}",
       "cwd": "${workspaceFolder}",
-      "preLaunchTask": "build"
+      "preLaunchTask": "build",
+      "console": "integratedTerminal"
     }
   ]
 }
