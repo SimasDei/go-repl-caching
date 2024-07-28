@@ -2,7 +2,7 @@ package main
 
 import "fmt"
 
-func callbackHelp() error {
+func callbackHelp(cfg *config) error {
 	availableCommands := getCommands()
 
 	for _, command := range availableCommands {

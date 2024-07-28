@@ -1,14 +1,15 @@
 package main
 
-import "github.com/SimasDei/go-repl-caching/internal/pokeapi"
+import (
+	"errors"
+)
 
-func callbackMap() error {
-	pokeApiClient := pokeapi.NewClient()
+func callbackMap(cfg *config) error {
 
-	resp, err := pokeApiClient.ListLocationAreas()
+	resp, err := cfg.pokeapiClient.ListLocationAreas(cfg.nextLocationAreaUrl)
 
 	if err != nil {
-		panic(err)
+		return err
 	}
 
 	println("Location areas:")
@@ -16,6 +17,32 @@ func callbackMap() error {
 	for _, locationArea := range resp.Results {
 		println(locationArea.Name)
 	}
+
+	cfg.nextLocationAreaUrl = resp.Next
+	cfg.prevLocationAreaUrl = resp.Previous
+
+	return nil
+}
+
+func callbackMapBack(cfg *config) error {
+	if cfg.prevLocationAreaUrl == nil {
+		return errors.New("No previous location area URL")
+	}
+
+	resp, err := cfg.pokeapiClient.ListLocationAreas(cfg.prevLocationAreaUrl)
+
+	if err != nil {
+		return err
+	}
+
+	println("Location areas:")
+
+	for _, locationArea := range resp.Results {
+		println(locationArea.Name)
+	}
+
+	cfg.nextLocationAreaUrl = resp.Next
+	cfg.prevLocationAreaUrl = resp.Previous
 
 	return nil
 }
