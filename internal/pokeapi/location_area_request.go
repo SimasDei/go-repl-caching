@@ -8,7 +8,7 @@ import (
 )
 
 func (c *Client) ListLocationAreas(pageUrl *string) (LocationAreasResp, error) {
-	endpoint := "/location-area"
+	endpoint := "/location-area?offset=0&limit=20"
 	fullUrl := baseUrl + endpoint
 
 	if pageUrl != nil {

@@ -11,7 +11,7 @@ func startRepl(cfg *config) {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	for {
-		fmt.Println(" >")
+		fmt.Print(" > ")
 
 		scanner.Scan()
 		text := scanner.Text()
@@ -77,6 +77,11 @@ func getCommands() map[string]CliCommand {
 			Name:        "explore {location area name}",
 			Description: "Explores a location",
 			callback:    callbackExplore,
+		},
+		"catch": {
+			Name:        "catch {pokemon name}",
+			Description: "Catches a Pokemon",
+			callback:    callbackCatch,
 		},
 	}
 }

@@ -1,9 +1,13 @@
 package pockecache
 
-import "time"
+import (
+	"sync"
+	"time"
+)
 
 type Cache struct {
 	cache map[string]CacheEntry
+	mux   *sync.Mutex
 }
 
 type CacheEntry struct {
@@ -14,12 +18,16 @@ type CacheEntry struct {
 func NewCache(interval time.Duration) Cache {
 	cache := Cache{
 		cache: make(map[string]CacheEntry),
+		mux:   &sync.Mutex{},
 	}
 	go cache.ReapScheduler(interval)
 	return cache
 }
 
 func (c *Cache) Add(key string, val []byte) {
+	c.mux.Lock()
+	defer c.mux.Unlock()
+
 	c.cache[key] = CacheEntry{
 		val:       val,
 		createdAt: time.Now().UTC(),
@@ -27,6 +35,9 @@ func (c *Cache) Add(key string, val []byte) {
 }
 
 func (c *Cache) Get(key string) ([]byte, bool) {
+	c.mux.Lock()
+	defer c.mux.Unlock()
+
 	entry, ok := c.cache[key]
 
 	if !ok {
@@ -37,6 +48,9 @@ func (c *Cache) Get(key string) ([]byte, bool) {
 }
 
 func (c *Cache) Reap(interval time.Duration) {
+	c.mux.Lock()
+	defer c.mux.Unlock()
+
 	timeThreshold := time.Now().UTC().Add(-interval)
 	for key, entry := range c.cache {
 		if entry.createdAt.Before(timeThreshold) {
